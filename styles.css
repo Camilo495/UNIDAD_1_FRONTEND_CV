@@ -1,0 +1,144 @@
+:root {
+  --navy:   #1e1a4b;
+  --gold:   #f5a623;
+  --white:  #ffffff;
+  --light:  #f0f2f8;
+  --mid:    #c8cce0;
+  --text:   #2d2a5e;
+  --shadow: 0 20px 60px rgba(30, 26, 75, 0.18);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-family: "Barlow", sans-serif;
+
+  background-color: var(--navy);
+
+  background-image: repeating-linear-gradient(
+    135deg,
+    transparent,
+    transparent 40px,
+    rgba(255,255,255,0.05) 40px,
+    rgba(255,255,255,0.05) 80px
+  );
+}
+
+.card {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 48px 44px 40px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.logo-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--light);
+}
+
+.logo-wrap img {
+  height: 80px;
+}
+
+.card h1 {
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--navy);
+  margin-bottom: 25px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+label {
+  font-weight: 500;
+  color: var(--text);
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  border-radius: 8px;
+  border: 1px solid var(--mid);
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--navy);
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 10px;
+  background: var(--gold);
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+}
+
+.divider {
+  margin: 20px 0;
+  color: var(--mid);
+}
+
+.card-footer {
+  font-size: 14px;
+}
+
+.card-footer a {
+  color: var(--navy);
+  text-decoration: none;
+  margin: 0 6px;
+}
+
+.card-footer a:hover {
+  text-decoration: underline;
+}
+
+body::before,
+body::after{
+  content:"";
+  position:fixed;
+  top:0;
+  width: 80px;
+  height:100vh;
+  background:var(--gold);
+}
+
+body::before{
+  left:0;
+}
+
+body::after{
+  right:0;
+}
