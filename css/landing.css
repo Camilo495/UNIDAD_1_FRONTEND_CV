@@ -10,7 +10,6 @@ background:linear-gradient(135deg, #2E1A47, #1b1030);
 color:white;
 min-height:100vh;
 position:relative;
-overflow:hidden;
 }
 
 .landing::before{
