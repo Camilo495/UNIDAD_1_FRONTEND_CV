@@ -41,6 +41,7 @@
     </div>
 
     <button class="btn-submit" type="button">Ingresar</button>
+    <p id="errorMsg" style="color:red; text-align:center; margin-top:10px;"></p>
 
     <div class="divider"><span>o</span></div>
 
@@ -54,6 +55,38 @@
     </div>
 
   </div>
-
+  <script>
+    document.querySelector(".btn-submit").addEventListener("click", function(){
+    
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const errorMsg = document.getElementById("errorMsg");
+    
+      errorMsg.textContent = "";
+    
+      const users = [
+        { user: "Gabriel.Lopez@sportclub.cl", password: "1234", role: "user" },
+        { user: "Andres.Maturana@sportclub.cl", password: "1234", role: "coach" },
+        { user: "Luis.Gallardo@sportclub.cl", password: "1234", role: "admin" }
+      ];
+    
+      const foundUser = users.find(u => u.user === email && u.password === password);
+    
+      if(foundUser){
+        if(foundUser.role === "user"){
+          window.location.href = "dashboard_user.html";
+        }
+        else if(foundUser.role === "coach"){
+          window.location.href = "dashboard_coach.html";
+        }
+        else if(foundUser.role === "admin"){
+          window.location.href = "dashboard_admin.html";
+        }
+      } else {
+        errorMsg.textContent = "Credenciales incorrectas";
+      }
+    
+    });
+    </script>
 </body>
 </html>
