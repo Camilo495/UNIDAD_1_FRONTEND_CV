@@ -85,6 +85,10 @@ document.querySelector(".btn-submit").addEventListener("click", async function()
     const data = await response.json();
 
     if(data.ok){
+      localStorage.setItem(
+    "token",
+    data.data.token
+  );
       const role=data.data.user.role;
       const nombre = data.data.user.full_name;
       localStorage.setItem("nombreUsuario", nombre);
