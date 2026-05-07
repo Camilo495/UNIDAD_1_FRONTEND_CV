@@ -33,7 +33,7 @@
     </header>
 
     <div class="welcome">
-      <h1>¡Hola, Gabriel Lopez! 👋</h1>
+      <h1 id="welcomeUser"></h1>
       <p>Bienvenido a tu panel de entrenamiento</p>
     </div>
 
@@ -94,6 +94,13 @@
     </main>
 
   </div>
+<script>
 
+const nombre = localStorage.getItem("nombreUsuario");
+
+document.getElementById("welcomeUser").textContent =
+`¡Hola, ${nombre}! 👋`;
+
+</script>
 </body>
 </html>

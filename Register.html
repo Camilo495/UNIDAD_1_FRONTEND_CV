@@ -17,18 +17,22 @@
 
 <h2>Crea tu Cuenta</h2>
 
-<input type="text" placeholder="Nombre Completo">
+<input type="text" id="fullname" placeholder="Nombre Completo">
 
-<input type="password" placeholder="Contraseña">
+<input type="password" id="password" placeholder="Contraseña">
 
-<input type="email" placeholder="Email">
+<input type="password" id="repeatPassword" placeholder="Repetir Contraseña">
+
+<input type="email" id="email" placeholder="Email">
 
 <div class="check">
   <input type="checkbox" id="terminos">
   <label for="terminos">Aceptas los términos de privacidad</label>
 </div>
 
-<button>Registrarse</button>
+<button class="btn-register">Registrarse</button>
+
+<p id="errorMsg" style="color:red; margin-top:10px;"></p>
 
 <p class="login-text">
 Ya tienes creada tu cuenta?
@@ -44,6 +48,107 @@ Ya tienes creada tu cuenta?
 </div>
 
 </div>
+
+<script>
+
+document.querySelector(".btn-register").addEventListener("click", async function(){
+
+  const fullname = document.getElementById("fullname").value;
+
+  const email = document.getElementById("email").value;
+
+  const password = document.getElementById("password").value;
+
+  const repeatPassword =
+  document.getElementById("repeatPassword").value;
+
+  const errorMsg = document.getElementById("errorMsg");
+
+  errorMsg.style.color = "red";
+
+  errorMsg.textContent = "";
+
+  if(
+    fullname === "" ||
+    email === "" ||
+    password === "" ||
+    repeatPassword === ""
+  ){
+    errorMsg.textContent = "Completa todos los campos";
+    return;
+  }
+
+  if(password.length < 8){
+    errorMsg.textContent =
+    "La contraseña debe tener mínimo 8 caracteres";
+    return;
+  }
+
+  const passwordRegex =
+  /^(?=.*[A-Za-z])(?=.*\d).+$/;
+
+  if(!passwordRegex.test(password)){
+    errorMsg.textContent =
+    "La contraseña debe tener letras y números";
+    return;
+  }
+
+  if(password !== repeatPassword){
+    errorMsg.textContent =
+    "Las contraseñas no coinciden";
+    return;
+  }
+
+  try{
+
+    const response = await fetch("http://localhost:3000/api/auth/register", {
+
+      method: "POST",
+
+      headers:{
+        "Content-Type":"application/json"
+      },
+
+      body: JSON.stringify({
+
+        full_name: fullname,
+        email: email,
+        password: password,
+        role: "user",
+        must_change_password: false
+
+      })
+
+    });
+
+    const data = await response.json();
+
+    if(data.ok){
+
+      errorMsg.style.color = "lime";
+
+      errorMsg.textContent =
+      "Usuario registrado correctamente";
+
+      setTimeout(() => {
+        window.location.href = "Pagina.html";
+      }, 2000);
+
+    }
+
+    else{
+      errorMsg.textContent = data.message;
+    }
+
+  }
+
+  catch(error){
+    errorMsg.textContent = "Error de conexión";
+  }
+
+});
+
+</script>
 
 </body>
 </html>
