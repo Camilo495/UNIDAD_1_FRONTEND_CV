@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Gestión de Usuarios</title>
+
+<link rel="stylesheet" href="css/Gestion_de_usuarios.css">
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<h2>SportClub</h2>
+
+<a href="dashboard_admin.html">
+Dashboard
+</a>
+
+<a href="users.html" class="active">
+Usuarios
+</a>
+
+<a href="profile.html">
+Perfil
+</a>
+
+<a href="Pagina.html">
+Cerrar sesión
+</a>
+
+</div>
+
+<div class="main">
+
+<div class="header">
+
+<div class="header-text">
+
+<h1>Gestión de Usuarios</h1>
+
+<p>
+Administra los usuarios del sistema
+</p>
+
+</div>
+
+<button class="btn-add">
+
++ Nuevo Usuario
+
+</button>
+
+</div>
+
+<div class="card">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>ID</th>
+<th>Nombre</th>
+<th>Email</th>
+<th>Rol</th>
+<th>Acciones</th>
+
+</tr>
+
+</thead>
+
+<tbody id="usersTableBody">
+
+</tbody>
+
+</table>
+
+</div>
+
+<div class="card">
+
+<h2>Nuevo Usuario</h2>
+
+<div class="form-grid">
+
+<input
+type="text"
+id="fullname"
+placeholder="Nombre completo">
+
+<input
+type="email"
+id="email"
+placeholder="Email">
+
+<select id="role">
+
+<option value="user">User</option>
+
+<option value="coach">Coach</option>
+
+<option value="admin">Admin</option>
+
+</select>
+
+<input
+type="password"
+id="password"
+placeholder="Contraseña">
+
+</div>
+
+<button
+class="btn save"
+onclick="createUser()">
+
+Guardar Usuario
+
+</button>
+
+<p id="errorMsg"></p>
+
+</div>
+
+</div>
+
+<script>
+
+const token = localStorage.getItem("token");
+
+async function loadUsers(){
+
+  try{
+
+    const response = await fetch(
+    "http://localhost:3000/api/users",{
+
+      headers:{
+        Authorization:`Bearer ${token}`
+      }
+
+    });
+
+    const data = await response.json();
+
+    const tbody =
+    document.getElementById("usersTableBody");
+
+    tbody.innerHTML = "";
+
+    data.data.forEach(user => {
+
+      tbody.innerHTML += `
+
+      <tr>
+
+      <td>${user.id}</td>
+
+      <td>${user.full_name}</td>
+
+      <td>${user.email}</td>
+
+      <td>
+
+        <span class="role ${user.role}">
+          ${user.role}
+        </span>
+
+      </td>
+
+      <td class="actions">
+
+        <button class="btn edit">
+          Editar
+        </button>
+
+        <button
+        class="btn delete"
+        onclick="deleteUser(${user.id})">
+
+          Eliminar
+
+        </button>
+
+      </td>
+
+      </tr>
+
+      `;
+
+    });
+
+  }
+
+  catch(error){
+    console.log(error);
+  }
+
+}
+
+async function createUser(){
+
+  const fullname =
+  document.getElementById("fullname").value;
+
+  const email =
+  document.getElementById("email").value;
+
+  const role =
+  document.getElementById("role").value;
+
+  const password =
+  document.getElementById("password").value;
+
+  const errorMsg =
+  document.getElementById("errorMsg");
+
+  errorMsg.textContent = "";
+
+  if(
+    fullname === "" ||
+    email === "" ||
+    password === ""
+  ){
+
+    errorMsg.textContent =
+    "Completa todos los campos";
+
+    return;
+  }
+
+  try{
+
+    await fetch(
+    "http://localhost:3000/api/users",{
+
+      method:"POST",
+
+      headers:{
+        "Content-Type":"application/json",
+        Authorization:`Bearer ${token}`
+      },
+
+      body:JSON.stringify({
+
+        full_name:fullname,
+        email:email,
+        password:password,
+        role:role
+
+      })
+
+    });
+
+    loadUsers();
+
+    errorMsg.style.color = "#4ade80";
+
+    errorMsg.textContent =
+    "Usuario creado correctamente";
+
+  }
+
+  catch(error){
+
+    errorMsg.textContent =
+    "Error al crear usuario";
+
+  }
+
+}
+
+async function deleteUser(id){
+
+  try{
+
+    await fetch(
+    `http://localhost:3000/api/users/${id}`,{
+
+      method:"DELETE",
+
+      headers:{
+        Authorization:`Bearer ${token}`
+      }
+
+    });
+
+    loadUsers();
+
+  }
+
+  catch(error){
+    console.log(error);
+  }
+
+}
+
+loadUsers();
+
+</script>
+
+</body>
+</html>
