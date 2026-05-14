@@ -2,153 +2,155 @@
 <html lang="es">
 
 <head>
-<meta charset="UTF-8">
-<title>Registro SportClub</title>
-<link rel="stylesheet" href="css/Register.css">
+  <meta charset="UTF-8">
+  <title>Registro SportClub</title>
+  <link rel="stylesheet" href="css/Register.css">
 </head>
 
 <body>
 
-<div class="container">
+  <div class="container">
 
-<div class="left">
+    <div class="left">
 
-<a href="index.html" class="home">< Pagina de inicio</a>
+      <a href="index.html" class="home">
+        < Pagina de inicio</a>
 
-<h2>Crea tu Cuenta</h2>
+          <h2>Crea tu Cuenta</h2>
 
-<input type="text" id="fullname" placeholder="Nombre Completo">
+          <input type="text" id="fullname" placeholder="Nombre Completo">
 
-<input type="password" id="password" placeholder="Contraseña">
+          <input type="password" id="password" placeholder="Contraseña">
 
-<input type="password" id="repeatPassword" placeholder="Repetir Contraseña">
+          <input type="password" id="repeatPassword" placeholder="Repetir Contraseña">
 
-<input type="email" id="email" placeholder="Email">
+          <input type="email" id="email" placeholder="Email">
 
-<div class="check">
-  <input type="checkbox" id="terminos">
-  <label for="terminos">Aceptas los términos de privacidad</label>
-</div>
+          <div class="check">
+            <input type="checkbox" id="terminos">
+            <label for="terminos">Aceptas los términos de privacidad</label>
+          </div>
 
-<button class="btn-register">Registrarse</button>
+          <button class="btn-register">Registrarse</button>
 
-<p id="errorMsg" style="color:red; margin-top:10px;"></p>
+          <p id="errorMsg" style="color:red; margin-top:10px;"></p>
 
-<p class="login-text">
-Ya tienes creada tu cuenta?
-<a href="Pagina.html">Inicar sesion</a>
-</p>
+          <p class="login-text">
+            Ya tienes creada tu cuenta?
+            <a href="Pagina.html">Inicar sesion</a>
+          </p>
 
-</div>
+    </div>
 
-<div class="right">
+    <div class="right">
 
-<img src="images/logo_empresa_letra_v1.png" class="logo">
+      <img src="images/logo_empresa_letra_v1.png" class="logo">
 
-</div>
+    </div>
 
-</div>
+  </div>
 
-<script>
+  <script>
 
-document.querySelector(".btn-register").addEventListener("click", async function(){
+    document.querySelector(".btn-register").addEventListener("click", async function () {
 
-  const fullname = document.getElementById("fullname").value;
+      const fullname = document.getElementById("fullname").value;
 
-  const email = document.getElementById("email").value;
+      const email = document.getElementById("email").value;
 
-  const password = document.getElementById("password").value;
+      const password = document.getElementById("password").value;
 
-  const repeatPassword =
-  document.getElementById("repeatPassword").value;
+      const repeatPassword =
+        document.getElementById("repeatPassword").value;
 
-  const errorMsg = document.getElementById("errorMsg");
+      const errorMsg = document.getElementById("errorMsg");
 
-  errorMsg.style.color = "red";
+      errorMsg.style.color = "red";
 
-  errorMsg.textContent = "";
+      errorMsg.textContent = "";
 
-  if(
-    fullname === "" ||
-    email === "" ||
-    password === "" ||
-    repeatPassword === ""
-  ){
-    errorMsg.textContent = "Completa todos los campos";
-    return;
-  }
+      if (
+        fullname === "" ||
+        email === "" ||
+        password === "" ||
+        repeatPassword === ""
+      ) {
+        errorMsg.textContent = "Completa todos los campos";
+        return;
+      }
 
-  if(password.length < 8){
-    errorMsg.textContent =
-    "La contraseña debe tener mínimo 8 caracteres";
-    return;
-  }
+      if (password.length < 8) {
+        errorMsg.textContent =
+          "La contraseña debe tener mínimo 8 caracteres";
+        return;
+      }
 
-  const passwordRegex =
-  /^(?=.*[A-Za-z])(?=.*\d).+$/;
+      const passwordRegex =
+        /^(?=.*[A-Za-z])(?=.*\d).+$/;
 
-  if(!passwordRegex.test(password)){
-    errorMsg.textContent =
-    "La contraseña debe tener letras y números";
-    return;
-  }
+      if (!passwordRegex.test(password)) {
+        errorMsg.textContent =
+          "La contraseña debe tener letras y números";
+        return;
+      }
 
-  if(password !== repeatPassword){
-    errorMsg.textContent =
-    "Las contraseñas no coinciden";
-    return;
-  }
+      if (password !== repeatPassword) {
+        errorMsg.textContent =
+          "Las contraseñas no coinciden";
+        return;
+      }
 
-  try{
+      try {
 
-    const response = await fetch("http://localhost:3000/api/auth/register", {
+        const response = await fetch("http://localhost:3000/api/auth/register", {
 
-      method: "POST",
+          method: "POST",
 
-      headers:{
-        "Content-Type":"application/json"
-      },
+          headers: {
+            "Content-Type": "application/json"
+          },
 
-      body: JSON.stringify({
+          body: JSON.stringify({
 
-        full_name: fullname,
-        email: email,
-        password: password,
-        role: "user",
-        must_change_password: false
+            full_name: fullname,
+            email: email,
+            password: password,
+            role: "user",
+            must_change_password: false
 
-      })
+          })
+
+        });
+
+        const data = await response.json();
+
+        if (data.ok) {
+
+          errorMsg.style.color = "lime";
+
+          errorMsg.textContent =
+            "Usuario registrado correctamente";
+
+          setTimeout(() => {
+            window.location.href = "Pagina.html";
+          }, 2000);
+
+        }
+
+        else {
+          errorMsg.textContent = data.message;
+        }
+
+      }
+
+      catch (error) {
+        errorMsg.textContent = "Error de conexión";
+      }
 
     });
 
-    const data = await response.json();
-
-    if(data.ok){
-
-      errorMsg.style.color = "lime";
-
-      errorMsg.textContent =
-      "Usuario registrado correctamente";
-
-      setTimeout(() => {
-        window.location.href = "Pagina.html";
-      }, 2000);
-
-    }
-
-    else{
-      errorMsg.textContent = data.message;
-    }
-
-  }
-
-  catch(error){
-    errorMsg.textContent = "Error de conexión";
-  }
-
-});
-
-</script>
+  </script>
 
 </body>
+
 </html>

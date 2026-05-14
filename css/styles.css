@@ -1,10 +1,10 @@
 :root {
-  --navy:   #1e1a4b;
-  --gold:   #f5a623;
-  --white:  #ffffff;
-  --light:  #f0f2f8;
-  --mid:    #c8cce0;
-  --text:   #2d2a5e;
+  --navy: #1e1a4b;
+  --gold: #f5a623;
+  --white: #ffffff;
+  --light: #f0f2f8;
+  --mid: #c8cce0;
+  --text: #2d2a5e;
   --shadow: 0 20px 60px rgba(30, 26, 75, 0.18);
 }
 
@@ -27,13 +27,11 @@ body {
 
   background-color: var(--navy);
 
-  background-image: repeating-linear-gradient(
-    135deg,
-    transparent,
-    transparent 40px,
-    rgba(255,255,255,0.05) 40px,
-    rgba(255,255,255,0.05) 80px
-  );
+  background-image: repeating-linear-gradient(135deg,
+      transparent,
+      transparent 40px,
+      rgba(255, 255, 255, 0.05) 40px,
+      rgba(255, 255, 255, 0.05) 80px);
 }
 
 .card {
@@ -103,7 +101,7 @@ input:focus {
 
 .btn-submit:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
 }
 
 .divider {
@@ -126,19 +124,19 @@ input:focus {
 }
 
 body::before,
-body::after{
-  content:"";
-  position:fixed;
-  top:0;
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
   width: 80px;
-  height:100vh;
-  background:var(--gold);
+  height: 100vh;
+  background: var(--gold);
 }
 
-body::before{
-  left:0;
+body::before {
+  left: 0;
 }
 
-body::after{
-  right:0;
+body::after {
+  right: 0;
 }

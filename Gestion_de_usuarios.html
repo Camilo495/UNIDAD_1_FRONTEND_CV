@@ -2,161 +2,150 @@
 <html lang="es">
 
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Gestión de Usuarios</title>
+  <title>Gestión de Usuarios</title>
 
-<link rel="stylesheet" href="css/Gestion_de_usuarios.css">
+  <link rel="stylesheet" href="css/Gestion_de_usuarios.css">
 
 </head>
 
 <body>
 
-<div class="sidebar">
+  <div class="sidebar">
 
-<h2>SportClub</h2>
+    <img src="images/logo_empresa_letra_v1.png" class="sidebar-logo">
 
-<a href="dashboard_admin.html">
-Dashboard
-</a>
+    <a href="dashboard_admin.html">
+      Dashboard
+    </a>
 
-<a href="users.html" class="active">
-Usuarios
-</a>
+    <a href="users.html" class="active">
+      Usuarios
+    </a>
 
-<a href="profile.html">
-Perfil
-</a>
+    <a href="profile.html">
+      Perfil
+    </a>
 
-<a href="Pagina.html">
-Cerrar sesión
-</a>
+    <a href="Pagina.html">
+      Cerrar sesión
+    </a>
 
-</div>
+  </div>
 
-<div class="main">
+  <div class="main">
 
-<div class="header">
+    <div class="header">
 
-<div class="header-text">
+      <div class="header-text">
 
-<h1>Gestión de Usuarios</h1>
+        <h1>Gestión de Usuarios</h1>
 
-<p>
-Administra los usuarios del sistema
-</p>
+        <p>
+          Administra los usuarios del sistema
+        </p>
 
-</div>
+      </div>
 
-<button class="btn-add">
+      <button class="btn-add">
 
-+ Nuevo Usuario
+        + Nuevo Usuario
 
-</button>
+      </button>
 
-</div>
+    </div>
 
-<div class="card">
+    <div class="card">
 
-<table>
+      <table>
 
-<thead>
+        <thead>
 
-<tr>
+          <tr>
 
-<th>ID</th>
-<th>Nombre</th>
-<th>Email</th>
-<th>Rol</th>
-<th>Acciones</th>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Rol</th>
+            <th>Acciones</th>
 
-</tr>
+          </tr>
 
-</thead>
+        </thead>
 
-<tbody id="usersTableBody">
+        <tbody id="usersTableBody">
 
-</tbody>
+        </tbody>
 
-</table>
+      </table>
 
-</div>
+    </div>
 
-<div class="card">
+    <div class="card">
 
-<h2>Nuevo Usuario</h2>
+      <h2>Nuevo Usuario</h2>
 
-<div class="form-grid">
+      <div class="form-grid">
 
-<input
-type="text"
-id="fullname"
-placeholder="Nombre completo">
+        <input type="text" id="fullname" placeholder="Nombre completo">
 
-<input
-type="email"
-id="email"
-placeholder="Email">
+        <input type="email" id="email" placeholder="Email">
 
-<select id="role">
+        <select id="role">
 
-<option value="user">User</option>
+          <option value="user">User</option>
 
-<option value="coach">Coach</option>
+          <option value="coach">Coach</option>
 
-<option value="admin">Admin</option>
+          <option value="admin">Admin</option>
 
-</select>
+        </select>
 
-<input
-type="password"
-id="password"
-placeholder="Contraseña">
+        <input type="password" id="password" placeholder="Contraseña">
 
-</div>
+      </div>
 
-<button
-class="btn save"
-onclick="createUser()">
+      <button class="btn save" onclick="createUser()">
 
-Guardar Usuario
+        Guardar Usuario
 
-</button>
+      </button>
 
-<p id="errorMsg"></p>
+      <p id="errorMsg"></p>
 
-</div>
+    </div>
 
-</div>
+  </div>
 
-<script>
+  <script>
 
-const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
-async function loadUsers(){
+    async function loadUsers() {
 
-  try{
+      try {
 
-    const response = await fetch(
-    "http://localhost:3000/api/users",{
+        const response = await fetch(
+          "http://localhost:3000/api/users", {
 
-      headers:{
-        Authorization:`Bearer ${token}`
-      }
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
 
-    });
+        });
 
-    const data = await response.json();
+        const data = await response.json();
 
-    const tbody =
-    document.getElementById("usersTableBody");
+        const tbody =
+          document.getElementById("usersTableBody");
 
-    tbody.innerHTML = "";
+        tbody.innerHTML = "";
 
-    data.data.forEach(user => {
+        data.data.forEach(user => {
 
-      tbody.innerHTML += `
+          tbody.innerHTML += `
 
       <tr>
 
@@ -194,116 +183,117 @@ async function loadUsers(){
 
       `;
 
-    });
+        });
 
-  }
-
-  catch(error){
-    console.log(error);
-  }
-
-}
-
-async function createUser(){
-
-  const fullname =
-  document.getElementById("fullname").value;
-
-  const email =
-  document.getElementById("email").value;
-
-  const role =
-  document.getElementById("role").value;
-
-  const password =
-  document.getElementById("password").value;
-
-  const errorMsg =
-  document.getElementById("errorMsg");
-
-  errorMsg.textContent = "";
-
-  if(
-    fullname === "" ||
-    email === "" ||
-    password === ""
-  ){
-
-    errorMsg.textContent =
-    "Completa todos los campos";
-
-    return;
-  }
-
-  try{
-
-    await fetch(
-    "http://localhost:3000/api/users",{
-
-      method:"POST",
-
-      headers:{
-        "Content-Type":"application/json",
-        Authorization:`Bearer ${token}`
-      },
-
-      body:JSON.stringify({
-
-        full_name:fullname,
-        email:email,
-        password:password,
-        role:role
-
-      })
-
-    });
-
-    loadUsers();
-
-    errorMsg.style.color = "#4ade80";
-
-    errorMsg.textContent =
-    "Usuario creado correctamente";
-
-  }
-
-  catch(error){
-
-    errorMsg.textContent =
-    "Error al crear usuario";
-
-  }
-
-}
-
-async function deleteUser(id){
-
-  try{
-
-    await fetch(
-    `http://localhost:3000/api/users/${id}`,{
-
-      method:"DELETE",
-
-      headers:{
-        Authorization:`Bearer ${token}`
       }
 
-    });
+      catch (error) {
+        console.log(error);
+      }
+
+    }
+
+    async function createUser() {
+
+      const fullname =
+        document.getElementById("fullname").value;
+
+      const email =
+        document.getElementById("email").value;
+
+      const role =
+        document.getElementById("role").value;
+
+      const password =
+        document.getElementById("password").value;
+
+      const errorMsg =
+        document.getElementById("errorMsg");
+
+      errorMsg.textContent = "";
+
+      if (
+        fullname === "" ||
+        email === "" ||
+        password === ""
+      ) {
+
+        errorMsg.textContent =
+          "Completa todos los campos";
+
+        return;
+      }
+
+      try {
+
+        await fetch(
+          "http://localhost:3000/api/users", {
+
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+          },
+
+          body: JSON.stringify({
+
+            full_name: fullname,
+            email: email,
+            password: password,
+            role: role
+
+          })
+
+        });
+
+        loadUsers();
+
+        errorMsg.style.color = "#4ade80";
+
+        errorMsg.textContent =
+          "Usuario creado correctamente";
+
+      }
+
+      catch (error) {
+
+        errorMsg.textContent =
+          "Error al crear usuario";
+
+      }
+
+    }
+
+    async function deleteUser(id) {
+
+      try {
+
+        await fetch(
+          `http://localhost:3000/api/users/${id}`, {
+
+          method: "DELETE",
+
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+
+        });
+
+        loadUsers();
+
+      }
+
+      catch (error) {
+        console.log(error);
+      }
+
+    }
 
     loadUsers();
 
-  }
-
-  catch(error){
-    console.log(error);
-  }
-
-}
-
-loadUsers();
-
-</script>
+  </script>
 
 </body>
+
 </html>

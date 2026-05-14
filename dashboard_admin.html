@@ -1,107 +1,109 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-<meta charset="UTF-8">
-<title>Dashboard Admin - SportClub</title>
-<link rel="stylesheet" href="css/dashboard_admin.css">
+  <meta charset="UTF-8">
+  <title>Dashboard Admin - SportClub</title>
+  <link rel="stylesheet" href="css/dashboard_admin.css">
 </head>
 
 <body>
 
-<div class="dashboard-container">
+  <div class="dashboard-container">
 
-<header class="topbar">
+    <header class="topbar">
 
-  <div class="brand">
-    <img src="images/logo_empresa_letra_v1.png" class="logo">
+      <div class="brand">
+        <img src="images/logo_empresa_letra_v1.png" class="logo">
+      </div>
+
+      <nav>
+        <a href="Gestion_de_usuarios.html">Usuarios</a>
+        <a href="#">Reportes</a>
+        <a href="#">Configuración</a>
+        <a href="perfil.html">Perfil</a>
+      </nav>
+
+      <div class="actions">
+        <a href="Pagina.html" class="btn logout">Cerrar sesión</a>
+      </div>
+
+    </header>
+
+    <div class="welcome">
+      <h1 id="welcomeUser"></h1>
+      <p>Control del sistema SportClub</p>
+    </div>
+
+    <main class="grid">
+
+      <section class="card profile">
+        <h3>👤 Gestión de usuarios</h3>
+
+        <div class="clase">
+          <span>Gabriel Lopez – Usuario</span>
+          <button class="btn small">Editar</button>
+        </div>
+
+        <div class="clase">
+          <span>Andrés Maturana – Coach</span>
+          <button class="btn small">Editar</button>
+        </div>
+
+        <div class="clase">
+          <span>Luis Gallardo – Administrador</span>
+          <button class="btn small">Editar</button>
+        </div>
+
+      </section>
+
+      <section class="card progress">
+        <h3>📊 Estadísticas</h3>
+
+        <div class="clase">
+          <span>Total usuarios: 20</span>
+          <button class="btn small">Ver</button>
+        </div>
+
+        <div class="clase">
+          <span>Total clases: 12</span>
+          <button class="btn small">Ver</button>
+        </div>
+
+      </section>
+
+      <section class="card side">
+        <h3>📋 Panel de control</h3>
+        <p>Usuarios activos: 15</p>
+        <p>Clases del día: 6</p>
+      </section>
+
+      <section class="card full">
+        <h3>📈 Reportes</h3>
+
+        <div class="clase">
+          <span>Reservas del mes: 45</span>
+          <button class="btn small">Ver detalle</button>
+        </div>
+
+        <div class="clase">
+          <span>Nuevos usuarios: 8</span>
+          <button class="btn small">Ver informe</button>
+        </div>
+
+      </section>
+
+    </main>
+
   </div>
+  <script>
 
-  <nav>
-    <a href="Gestion_de_usuarios.html">Usuarios</a>
-    <a href="#">Reportes</a>
-    <a href="#">Configuración</a>
-  </nav>
+    const nombre = localStorage.getItem("nombreUsuario");
 
-  <div class="actions">
-    <button class="btn">Editar perfil</button>
-    <a href="Pagina.html" class="btn logout">Cerrar sesión</a>
-  </div>
+    document.getElementById("welcomeUser").textContent =
+      `¡Hola, ${nombre}! 👋`;
 
-</header>
-
-<div class="welcome">
-  <h1 id="welcomeUser"></h1>
-  <p>Control del sistema SportClub</p>
-</div>
-
-<main class="grid">
-
-  <section class="card profile">
-    <h3>👤 Gestión de usuarios</h3>
-
-    <div class="clase">
-      <span>Gabriel Lopez – Usuario</span>
-      <button class="btn small">Editar</button>
-    </div>
-
-    <div class="clase">
-      <span>Andrés Maturana – Coach</span>
-      <button class="btn small">Editar</button>
-    </div>
-
-    <div class="clase">
-      <span>Luis Gallardo – Administrador</span>
-      <button class="btn small">Editar</button>
-    </div>
-
-  </section>
-
-  <section class="card progress">
-    <h3>📊 Estadísticas</h3>
-
-    <div class="clase">
-      <span>Total usuarios: 20</span>
-      <button class="btn small">Ver</button>
-    </div>
-
-    <div class="clase">
-      <span>Total clases: 12</span>
-      <button class="btn small">Ver</button>
-    </div>
-
-  </section>
-
-  <section class="card side">
-    <h3>📋 Panel de control</h3>
-    <p>Usuarios activos: 15</p>
-    <p>Clases del día: 6</p>
-  </section>
-
-  <section class="card full">
-    <h3>📈 Reportes</h3>
-
-    <div class="clase">
-      <span>Reservas del mes: 45</span>
-      <button class="btn small">Ver detalle</button>
-    </div>
-
-    <div class="clase">
-      <span>Nuevos usuarios: 8</span>
-      <button class="btn small">Ver informe</button>
-    </div>
-
-  </section>
-
-</main>
-
-</div>
-<script>
-
-const nombre = localStorage.getItem("nombreUsuario");
-
-document.getElementById("welcomeUser").textContent =
-`¡Hola, ${nombre}! 👋`;
-
-</script>
+  </script>
 </body>
+
 </html>

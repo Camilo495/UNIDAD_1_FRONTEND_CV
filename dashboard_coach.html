@@ -1,108 +1,110 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-<meta charset="UTF-8">
-<title>Dashboard Coach - SportClub</title>
-<link rel="stylesheet" href="css/dashboard_coach.css">
+  <meta charset="UTF-8">
+  <title>Dashboard Coach - SportClub</title>
+  <link rel="stylesheet" href="css/dashboard_coach.css">
 </head>
 
 <body>
 
-<div class="dashboard-container">
+  <div class="dashboard-container">
 
-<header class="topbar">
+    <header class="topbar">
 
-  <div class="brand">
-    <img src="images/logo_empresa_letra_v1.png" class="logo">
+      <div class="brand">
+        <img src="images/logo_empresa_letra_v1.png" class="logo">
+      </div>
+
+      <nav>
+        <a href="#">Inicio</a>
+        <a href="#">Alumnos</a>
+        <a href="#">Clases</a>
+        <a href="perfil.html">Perfil</a>
+      </nav>
+
+      <div class="actions">
+        <a href="Pagina.html" class="btn logout">Cerrar sesión</a>
+      </div>
+
+    </header>
+
+    <div class="welcome">
+      <h1 id="welcomeUser"></h1>
+      <p>Gestiona tus alumnos y clases</p>
+    </div>
+
+    <main class="grid">
+
+      <section class="card profile">
+        <h3>👥 Mis Alumnos</h3>
+
+        <div class="clase">
+          <span>Gabriel Lopez – Gabriel.Lopez@sportclub.cl</span>
+          <button class="btn small">Ver progreso</button>
+        </div>
+
+        <div class="clase">
+          <span>María Villalobos– Maria.Villalobos@sportclub.cl</span>
+          <button class="btn small">Ver progreso</button>
+        </div>
+
+        <div class="clase">
+          <span>Juan Osandon– Juan.Osandon@sportclub.cl</span>
+          <button class="btn small">Ver progreso</button>
+        </div>
+
+      </section>
+
+      <section class="card progress">
+        <h3>📚 Clases asignadas</h3>
+
+        <div class="clase">
+          <span>Funcional – Martes 19:00</span>
+          <button class="btn small">Gestionar</button>
+        </div>
+
+        <div class="clase">
+          <span>Crossfit – Lunes 18:00</span>
+          <button class="btn small">Gestionar</button>
+        </div>
+
+      </section>
+
+      <section class="card side">
+        <h3>🕐 Horarios</h3>
+        <p>Lunes – 18:00</p>
+        <p>Martes – 19:00</p>
+        <p>Miércoles – 10:00</p>
+      </section>
+
+      <section class="card full">
+        <h3>📊 Resumen del Coach</h3>
+
+        <div class="clase">
+          <span>Alumnos activos: 3</span>
+          <button class="btn small">Ver detalle</button>
+        </div>
+
+        <div class="clase">
+          <span>Clases esta semana: 5</span>
+          <button class="btn small">Ver calendario</button>
+        </div>
+
+      </section>
+
+    </main>
+
   </div>
+  <script>
 
-  <nav>
-    <a href="#">Inicio</a>
-    <a href="#">Alumnos</a>
-    <a href="#">Clases</a>
-  </nav>
+    const nombre = localStorage.getItem("nombreUsuario");
 
-  <div class="actions">
-    <button class="btn">Editar perfil</button>
-    <a href="Pagina.html" class="btn logout">Cerrar sesión</a>
-  </div>
+    document.getElementById("welcomeUser").textContent =
+      `¡Hola, ${nombre}! 👋`;
 
-</header>
-
-<div class="welcome">
-  <h1 id="welcomeUser"></h1>
-  <p>Gestiona tus alumnos y clases</p>
-</div>
-
-<main class="grid">
-
-  <section class="card profile">
-    <h3>👥 Mis Alumnos</h3>
-
-    <div class="clase">
-      <span>Gabriel Lopez – Gabriel.Lopez@sportclub.cl</span>
-      <button class="btn small">Ver progreso</button>
-    </div>
-
-    <div class="clase">
-      <span>María Villalobos– Maria.Villalobos@sportclub.cl</span>
-      <button class="btn small">Ver progreso</button>
-    </div>
-
-    <div class="clase">
-      <span>Juan Osandon– Juan.Osandon@sportclub.cl</span>
-      <button class="btn small">Ver progreso</button>
-    </div>
-
-  </section>
-
-  <section class="card progress">
-    <h3>📚 Clases asignadas</h3>
-
-    <div class="clase">
-      <span>Funcional – Martes 19:00</span>
-      <button class="btn small">Gestionar</button>
-    </div>
-
-    <div class="clase">
-      <span>Crossfit – Lunes 18:00</span>
-      <button class="btn small">Gestionar</button>
-    </div>
-
-  </section>
-
-  <section class="card side">
-    <h3>🕐 Horarios</h3>
-    <p>Lunes – 18:00</p>
-    <p>Martes – 19:00</p>
-    <p>Miércoles – 10:00</p>
-  </section>
-
-  <section class="card full">
-    <h3>📊 Resumen del Coach</h3>
-
-    <div class="clase">
-      <span>Alumnos activos: 3</span>
-      <button class="btn small">Ver detalle</button>
-    </div>
-
-    <div class="clase">
-      <span>Clases esta semana: 5</span>
-      <button class="btn small">Ver calendario</button>
-    </div>
-
-  </section>
-
-</main>
-
-</div>
-<script>
-
-const nombre = localStorage.getItem("nombreUsuario");
-
-document.getElementById("welcomeUser").textContent =
-`¡Hola, ${nombre}! 👋`;
-
-</script>
+  </script>
 </body>
+
 </html>

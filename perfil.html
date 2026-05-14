@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil - SportClub</title>
+    <link rel="stylesheet" href="css/perfil.css">
+</head>
+
+<body>
+    <aside class="sidebar">
+        <img src="images/logo_empresa_letra_v1.png" class="sidebar-logo">
+
+        <a id="dashboardLink" href="#">Dashboard</a>
+        <a href="perfil.html" class="active">Perfil</a>
+        <a href="Pagina.html" onclick="localStorage.clear()">Cerrar sesión</a>
+    </aside>
+
+    <main class="main">
+        <section class="header">
+            <h1>Mi Perfil</h1>
+            <p>Visualiza tu información personal y estado dentro de SportClub</p>
+        </section>
+
+        <section class="profile-layout">
+
+            <div class="card profile-card">
+                <div class="avatar">👤</div>
+
+                <h2 id="profileName">Cargando...</h2>
+
+                <span id="profileRole" class="badge">rol</span>
+
+                <div class="profile-data">
+                    <p><strong>📧 Email:</strong> <span id="profileEmail"></span></p>
+
+                    <p><strong>🎂 Fecha nacimiento:</strong>
+                        <span id="profileBirth"></span>
+                    </p>
+
+                    <p><strong>🟢 Estado:</strong> Activo</p>
+                </div>
+
+                <a id="editProfileBtn" class="btn edit-btn">
+                    Editar perfil
+                </a>
+
+                <p id="profileMsg"></p>
+            </div>
+
+            <div class="info-section">
+
+                <div class="card">
+                    <h3>Datos personales</h3>
+
+                    <p>
+                        En esta sección puedes revisar tu información
+                        principal del sistema.
+                    </p>
+
+                    <div class="info-grid">
+
+                        <div class="info-box">
+                            <span>Nombre</span>
+                            <strong id="boxName">Cargando...</strong>
+                        </div>
+
+                        <div class="info-box">
+                            <span>Rol</span>
+                            <strong id="boxRole">Cargando...</strong>
+                        </div>
+
+                        <div class="info-box">
+                            <span>Cuenta</span>
+                            <strong>Activa</strong>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="stats">
+
+                    <div class="stat-card">
+                        <h4>Reservas</h4>
+                        <p>12</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <h4>Clases</h4>
+                        <p>5</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <h4>Progreso</h4>
+                        <p>80%</p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+    </main>
+
+    <script>
+        const token = localStorage.getItem("token");
+
+        const roleStorage = localStorage.getItem("role");
+
+        if (!token) {
+            window.location.href = "Pagina.html";
+        }
+
+        function formatDate(dateString) {
+
+            if (!dateString) {
+                return "No registrada";
+            }
+
+            const dateParts = dateString.split("-");
+
+            if (dateParts.length !== 3) {
+                return dateString;
+            }
+
+            return `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
+        }
+
+        async function loadProfile() {
+
+            try {
+
+                const response = await fetch(
+                    "http://localhost:3000/api/auth/me",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );
+
+                const data = await response.json();
+
+                if (!data.ok && !data.data && !data.user) {
+
+                    document.getElementById("profileMsg").textContent =
+                        data.message || "No se pudo cargar el perfil";
+
+                    return;
+                }
+
+                const user =
+                    data.data?.user ||
+                    data.user ||
+                    data.data;
+
+                const role = user.role || roleStorage;
+
+                document.getElementById("profileName").textContent =
+                    user.full_name;
+
+                document.getElementById("profileEmail").textContent =
+                    user.email.toLowerCase();
+
+                document.getElementById("profileRole").textContent =
+                    role;
+
+                document.getElementById("profileBirth").textContent =
+                    formatDate(user.birth_date);
+
+                document.getElementById("boxName").textContent =
+                    user.full_name;
+
+                document.getElementById("boxRole").textContent =
+                    role;
+
+                document.getElementById("profileRole").className =
+                    `badge ${role}`;
+
+                configurarLinks(role);
+
+            } catch (error) {
+
+                document.getElementById("profileMsg").textContent =
+                    "Error al cargar perfil";
+            }
+        }
+
+        function configurarLinks(role) {
+
+            const dashboardLink =
+                document.getElementById("dashboardLink");
+
+            const editProfileBtn =
+                document.getElementById("editProfileBtn");
+
+            if (role === "user") {
+
+                dashboardLink.href =
+                    "dashboard_user.html";
+
+                editProfileBtn.href =
+                    "Editar_perfil_user.html";
+            }
+
+            else if (role === "coach") {
+
+                dashboardLink.href =
+                    "dashboard_coach.html";
+
+                editProfileBtn.href =
+                    "Editar_perfil_coach.html";
+            }
+
+            else if (role === "admin") {
+
+                dashboardLink.href =
+                    "dashboard_admin.html";
+
+                editProfileBtn.href =
+                    "Editar_perfil_admin.html";
+            }
+        }
+
+        loadProfile();
+    </script>
+</body>
+
+</html>

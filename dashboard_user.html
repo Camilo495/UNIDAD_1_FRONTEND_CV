@@ -22,11 +22,10 @@
       <nav>
         <a href="dashboard_user.html">Inicio</a>
         <a href="#">Reservas</a>
-        <a href="#">Perfil</a>
+        <a href="perfil.html">Perfil</a>
       </nav>
 
       <div class="actions">
-        <button class="btn">Editar perfil</button>
         <a href="Pagina.html" class="btn logout">Cerrar sesión</a>
       </div>
 
@@ -94,13 +93,14 @@
     </main>
 
   </div>
-<script>
+  <script>
 
-const nombre = localStorage.getItem("nombreUsuario");
+    const nombre = localStorage.getItem("nombreUsuario");
 
-document.getElementById("welcomeUser").textContent =
-`¡Hola, ${nombre}! 👋`;
+    document.getElementById("welcomeUser").textContent =
+      `¡Hola, ${nombre}! 👋`;
 
-</script>
+  </script>
 </body>
+
 </html>
