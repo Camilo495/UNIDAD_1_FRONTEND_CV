@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Perfil Coach - SportClub</title>
+    <link rel="stylesheet" href="css/Editar_perfil_coach.css">
+</head>
+
+<body>
+    <aside class="sidebar">
+        <img src="images/logo_empresa_letra_v1.png" class="sidebar-logo">
+
+        <a href="dashboard_coach.html">Dashboard</a>
+        <a href="Editar_perfil_coach.html" class="active">Perfil</a>
+        <a href="Pagina.html" onclick="localStorage.clear()">Cerrar sesión</a>
+    </aside>
+
+    <main class="main">
+        <section class="header">
+            <h1>Editar Perfil</h1>
+            <p>Gestiona tu información personal</p>
+        </section>
+
+        <section class="profile-layout">
+            <div class="card user-card">
+                <div class="avatar">👤</div>
+                <h2 id="profileName">Cargando...</h2>
+                <span id="profileRole" class="badge">rol</span>
+                <p><strong>Email:</strong> <span id="profileEmail"></span></p>
+                <p><strong>Fecha nacimiento:</strong> <span id="profileBirth"></span></p>
+            </div>
+
+            <div class="card">
+                <h2>Información Personal</h2>
+
+                <div class="form-grid">
+                    <div>
+                        <label>Nombre completo</label>
+                        <input type="text" id="fullname">
+                        <small id="nameError"></small>
+                    </div>
+
+                    <div>
+                        <label>Email</label>
+                        <input type="email" id="email" disabled>
+                    </div>
+
+                    <div>
+                        <label>Rol</label>
+                        <input type="text" id="role" disabled>
+                    </div>
+
+                    <div>
+                        <label>Fecha de nacimiento</label>
+                        <input type="date" id="birthdate">
+                    </div>
+                </div>
+
+                <button class="btn save" onclick="updateProfile()">Guardar cambios</button>
+                <p id="profileMsg"></p>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>Cambiar contraseña</h2>
+
+            <div class="form-grid">
+                <div>
+                    <label>Contraseña actual</label>
+                    <input type="password" id="currentPassword">
+                </div>
+
+                <div>
+                    <label>Nueva contraseña</label>
+                    <input type="password" id="newPassword">
+                </div>
+
+                <div>
+                    <label>Confirmar contraseña</label>
+                    <input type="password" id="confirmPassword">
+                </div>
+            </div>
+
+            <button class="btn password" onclick="changePassword()">Actualizar contraseña</button>
+            <p id="passwordMsg"></p>
+        </section>
+    </main>
+
+    <script>
+        const token = localStorage.getItem("token");
+        let userId = null;
+
+        if (!token) {
+            window.location.href = "Pagina.html";
+        }
+
+        async function loadProfile() {
+            try {
+                const response = await fetch("http://localhost:3000/api/auth/me", {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+
+                const data = await response.json();
+
+                if (!data.ok && !data.data && !data.user) {
+                    document.getElementById("profileMsg").textContent =
+                        data.message || "No se pudo cargar el perfil";
+                    return;
+                }
+
+                const user = data.data?.user || data.user || data.data;
+
+                userId = user.id;
+
+                document.getElementById("profileName").textContent = user.full_name;
+                document.getElementById("profileEmail").textContent = user.email;
+                document.getElementById("profileRole").textContent = user.role;
+                document.getElementById("profileBirth").textContent =
+                    user.birth_date || "No registrada";
+
+                document.getElementById("fullname").value = user.full_name;
+                document.getElementById("email").value = user.email;
+                document.getElementById("role").value = user.role;
+                document.getElementById("birthdate").value = user.birth_date || "";
+
+                document.getElementById("profileRole").className = `badge ${user.role}`;
+            } catch (error) {
+                document.getElementById("profileMsg").textContent =
+                    "Error al cargar perfil";
+            }
+        }
+
+        async function updateProfile() {
+            const fullname = document.getElementById("fullname").value;
+            const birthdate = document.getElementById("birthdate").value;
+            const profileMsg = document.getElementById("profileMsg");
+            const nameError = document.getElementById("nameError");
+            const fullnameInput = document.getElementById("fullname");
+
+            profileMsg.textContent = "";
+            nameError.textContent = "";
+            fullnameInput.classList.remove("error");
+
+            if (fullname === "") {
+                nameError.textContent = "El nombre es obligatorio";
+                fullnameInput.classList.add("error");
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://localhost:3000/api/users/${userId}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        full_name: fullname,
+                        birth_date: birthdate
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.ok) {
+                    profileMsg.style.color = "#4ade80";
+                    profileMsg.textContent = "Perfil actualizado correctamente";
+                    localStorage.setItem("nombreUsuario", fullname);
+                    loadProfile();
+                } else {
+                    profileMsg.style.color = "#ff6b6b";
+                    profileMsg.textContent = data.message || "No se pudo actualizar el perfil";
+                }
+            } catch (error) {
+                profileMsg.style.color = "#ff6b6b";
+                profileMsg.textContent = "Error al actualizar perfil";
+            }
+        }
+
+        async function changePassword() {
+            const currentPassword = document.getElementById("currentPassword").value;
+            const newPassword = document.getElementById("newPassword").value;
+            const confirmPassword = document.getElementById("confirmPassword").value;
+            const passwordMsg = document.getElementById("passwordMsg");
+
+            passwordMsg.style.color = "#ff6b6b";
+            passwordMsg.textContent = "";
+
+            if (currentPassword === "" || newPassword === "" || confirmPassword === "") {
+                passwordMsg.textContent = "Completa todos los campos";
+                return;
+            }
+
+            if (newPassword.length < 8) {
+                passwordMsg.textContent = "La nueva contraseña debe tener mínimo 8 caracteres";
+                return;
+            }
+
+            const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).+$/;
+
+            if (!passwordRegex.test(newPassword)) {
+                passwordMsg.textContent = "La contraseña debe tener letras y números";
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                passwordMsg.textContent = "Las contraseñas no coinciden";
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://localhost:3000/api/users/${userId}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        password: newPassword
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.ok) {
+                    passwordMsg.style.color = "#4ade80";
+                    passwordMsg.textContent = "Contraseña actualizada correctamente";
+
+                    document.getElementById("currentPassword").value = "";
+                    document.getElementById("newPassword").value = "";
+                    document.getElementById("confirmPassword").value = "";
+                } else {
+                    passwordMsg.textContent = data.message || "No se pudo cambiar la contraseña";
+                }
+            } catch (error) {
+                passwordMsg.textContent = "Error al cambiar contraseña";
+            }
+        }
+
+        loadProfile();
+    </script>
+</body>
+
+</html>
